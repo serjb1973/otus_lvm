@@ -19,7 +19,7 @@ vagrant up
 ```
 
 ### Команды
-# Создание LVM объектов
+#### Создание LVM объектов
 ```
 vagrant ssh
 sudo su - root
@@ -29,7 +29,7 @@ lvcreate -n lv_root -l +100%FREE /dev/vg_root
 mkfs.xfs /dev/vg_root/lv_root
 mount /dev/vg_root/lv_root /mnt
 ```
-# Уменьшить том под / до 8G
+#### Уменьшить том под / до 8G
 ```
 xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt
 for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done
@@ -50,7 +50,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; s/.img//g"` --force; done
 ```
 
-# Выделить отдельно /var в "зеркале"
+#### Выделить отдельно /var в "зеркале"
 ```
 pvcreate /dev/sdc /dev/sdd
 vgcreate vg_var /dev/sdc /dev/sdd
@@ -68,7 +68,7 @@ vgremove /dev/vg_root
 pvremove /dev/sdb
 ```
 
-# Выделить отдельно /home
+#### Выделить отдельно /home
 ```
 lvcreate -n LogVol_Home -L 2G /dev/VolGroup00
 mkfs.xfs /dev/VolGroup00/LogVol_Home
@@ -80,7 +80,7 @@ mount /dev/VolGroup00/LogVol_Home /home/
 echo "`blkid | grep Home | awk '{print $2}'` /home xfs defaults 0 0" >> /etc/fstab
 ```
 
-# Работа со snaphsot
+#### Работа со snaphsot
 ```
 touch /home/file{1..20}
 lvcreate -L 100MB -s -n home_snap /dev/VolGroup00/LogVol_Home
